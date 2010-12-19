@@ -44,25 +44,10 @@ public class FlipCoinServiceImpl extends RemoteServiceServlet implements
 		final int choice = generator.nextInt(2);
 		String result = "The coin came up ";
 		if (choice == 0) {
-			result += "heads. " + escapeHtml(nameHeads);
+			result += "heads. " + nameHeads;
 		} else {
-			result += "tails. " + escapeHtml(nameTails);
+			result += "tails. " + nameTails;
 		}
 		return result + " wins!";
-	}
-
-	/**
-	 * Escape an html string. Escaping data received from the client helps to
-	 * prevent cross-site script vulnerabilities.
-	 * 
-	 * @param html the html string to escape
-	 * @return the escaped string
-	 */
-	private String escapeHtml(String html) {
-		if (html == null) {
-			return null;
-		}
-		return html.replaceAll("&", "&amp;").replaceAll("<", "&lt;")
-				.replaceAll(">", "&gt;");
 	}
 }

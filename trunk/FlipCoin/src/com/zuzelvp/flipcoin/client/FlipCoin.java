@@ -200,7 +200,6 @@ public class FlipCoin implements EntryPoint {
 					validData = false;
 				} else {
 					lblName2Error.setText("");
-					lblName2Error.setVisible(false);
 				}
 				final String email2 = tbEmail2.getText().trim();
 				tbEmail2.setFocus(true);
