@@ -1,16 +1,17 @@
 package com.zuzelvp.flipcoin.client;
 
+import java.util.Random;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.SimpleRadioButton;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimpleRadioButton;
+import com.google.gwt.user.client.ui.TextBox;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -22,6 +23,7 @@ public class FlipCoin implements EntryPoint {
 	private TextBox tbEmail2;
 	private SimpleRadioButton srbHeads1;
 	private SimpleRadioButton srbHeads2;
+	private Random generator;
 	public void onModuleLoad() {
 		RootPanel rootPanel = RootPanel.get();
 		
@@ -50,6 +52,7 @@ public class FlipCoin implements EntryPoint {
 		grid.setWidget(2, 1, tbEmail1);
 		
 		srbHeads1 = new SimpleRadioButton("heads1");
+		// Uncheck the other radio button
 		srbHeads1.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				srbHeads2.setValue(false);
@@ -66,6 +69,7 @@ public class FlipCoin implements EntryPoint {
 		grid.setWidget(3, 1, tbEmail2);
 		
 		srbHeads2 = new SimpleRadioButton("heads2");
+		// Uncheck the other radio button
 		srbHeads2.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				srbHeads1.setValue(false);
@@ -91,8 +95,12 @@ public class FlipCoin implements EntryPoint {
 		grid.getCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_BOTTOM);
 		grid.getCellFormatter().setVerticalAlignment(1, 1, HasVerticalAlignment.ALIGN_BOTTOM);
 		grid.getCellFormatter().setVerticalAlignment(1, 2, HasVerticalAlignment.ALIGN_BOTTOM);
+		generator = new Random();
 	}
-	protected void Flip() {
+
+
+	protected void Flip() { 
+		// Validate user input 
 		final String name1 = tbName1.getText().trim();
 		if (isEmpty(name1, tbName1)) {
 			return;
@@ -115,14 +123,29 @@ public class FlipCoin implements EntryPoint {
 		    Window.alert("Please select who wins if the coin comes up heads.");
 			return;
 		}
-		Window.alert("Flip!");
+		// Assign the names according to who picked heads		
+	    String nameHeads = name1;
+	    String nameTails = name2;
+	    if (!heads1) {
+	    	nameHeads = name2;
+	    	nameTails = name1;
+	    }
+	    // Flip a coin
+		final int choice = generator.nextInt(2);
+		if (choice == 0) {
+			Window.alert("The coin came up heads, so the winer is " + nameHeads + ".");
+		} else {
+			Window.alert("The coin came up tails, so the winer is " + nameTails + ".");
+		}
 	}
 	
-	private boolean isEmpty(String name, TextBox tbName) {
-		tbName.setFocus(true);
+	
+	private boolean isEmpty(String text, TextBox textBox) {
+		// If the textbox was empty the focus will be on it after the user
+		// closes the alert window.
+		textBox.setFocus(true);
 
-	    // The user should provide a name
-	    if (name == "") {
+	    if (text == "") {
 	      Window.alert("Please fill out the two names and the two email addresses.");
 	      return true;
 	    }
