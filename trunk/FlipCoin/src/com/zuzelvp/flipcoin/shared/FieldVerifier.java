@@ -30,7 +30,7 @@ public class FieldVerifier {
 	 */
 	public static boolean validName(String name) {
 		// A name is valid if it is not empty
-        return !(name == "");
+        return !("".equals(name));
 	}
 	
 	/**
